@@ -13,11 +13,14 @@ import {
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const Calculator = () => {
   const [operation, setOperation] = useState("");
   const [result, setResult] = useState("");
+  const firstRef = useRef(null);
+  const secondRef = useRef(null);
+  const resultRef = useRef(null);
 
   const handleChange = (e) => {
     setOperation(e.target.value);
@@ -27,8 +30,8 @@ const Calculator = () => {
     e.preventDefault();
     const query = {
       operation: operation,
-      first: e.target.first.value,
-      second: e.target.second.value,
+      first: firstRef.current.value,
+      second: secondRef.current.value,
     };
 
     axios
@@ -41,12 +44,25 @@ const Calculator = () => {
       });
   };
 
+  const handleReset = (e) => {
+    e.preventDefault();
+    setOperation("");
+    setResult("");
+    firstRef.current.value = null;
+    secondRef.current.value = null;
+  };
+
   return (
     <form id="calculator-form" onSubmit={handleCalculate}>
       <Grid2 container spacing={1}>
         <Grid2 xs={5}>
           <FormControl fullWidth>
-            <TextField id="first" label="First Number" variant="outlined" />
+            <TextField
+              id="first"
+              label="First Number"
+              variant="outlined"
+              inputRef={firstRef}
+            />
           </FormControl>
         </Grid2>
         <Grid2 xs={2}>
@@ -70,13 +86,25 @@ const Calculator = () => {
         </Grid2>
         <Grid2 xs={5}>
           <FormControl fullWidth>
-            <TextField id="second" label="Second Number" variant="outlined" />
+            <TextField
+              id="second"
+              label="Second Number"
+              variant="outlined"
+              inputRef={secondRef}
+            />
           </FormControl>
         </Grid2>
-        <Grid2 xs={12}>
+        <Grid2 xs={10}>
           <FormControl fullWidth>
             <Button variant="contained" type="submit">
               Calculate
+            </Button>
+          </FormControl>
+        </Grid2>
+        <Grid2 xs={2}>
+          <FormControl fullWidth>
+            <Button variant="outlines" onClick={handleReset}>
+              Reset
             </Button>
           </FormControl>
         </Grid2>
@@ -97,4 +125,22 @@ const Calculator = () => {
   );
 };
 export default Calculator;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
