@@ -3,7 +3,6 @@ import {
   Box,
   Paper,
   TextField,
-  MenuItem,
   FormControl,
   NativeSelect,
   Button,
@@ -20,7 +19,6 @@ const Calculator = () => {
   const [result, setResult] = useState("");
   const firstRef = useRef(null);
   const secondRef = useRef(null);
-  const resultRef = useRef(null);
 
   const handleChange = (e) => {
     setOperation(e.target.value);
@@ -125,6 +123,8 @@ const Calculator = () => {
   );
 };
 export default Calculator;
+
+
 
 
 
