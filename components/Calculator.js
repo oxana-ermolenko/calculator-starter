@@ -53,7 +53,7 @@ const Calculator = () => {
     setResult(welcomeMessage);
     firstRef.current.value = null;
     secondRef.current.value = null;
-    document.activeElement.blur();
+    document.querySelector("#operation").selectedIndex = 0;
   };
 
   return (
@@ -129,6 +129,7 @@ const Calculator = () => {
   );
 };
 export default Calculator;
+
 
 
 
