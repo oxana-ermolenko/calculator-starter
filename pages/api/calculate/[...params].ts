@@ -1,6 +1,13 @@
 import { add, subtract, multiply, divide } from "../../../utils/calculate";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default function handler(req, res) {
+interface Params {
+  operation: string;
+  first: number;
+  second: number;
+}
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (req.method !== "GET") {
       throw new Error(
@@ -8,7 +15,7 @@ export default function handler(req, res) {
       );
     }
 
-    const params = extractParams(req.query.params);
+    const params: Params = extractParams(req.query.params);
     let result;
     switch (params.operation) {
       case "add":
@@ -32,15 +39,15 @@ export default function handler(req, res) {
   }
 }
 
-function extractParams(queryParams) {
-  if (queryParams.length !== 3) {
+function extractParams(queryParams: string[] | string | undefined): Params{
+  if (queryParams?.length !== 3) {
     throw new Error(
-      `Query params should have 3 items. Received ${queryParams.length}: ${queryParams}`
+      `Query params should have 3 items. Received ${queryParams?.length}: ${queryParams}`
     );
   }
 
   try {
-    const params = {
+    const params: Params = {
       operation: queryParams[0],
       first: parseInt(queryParams[1]),
       second: parseInt(queryParams[2]),
