@@ -34,7 +34,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new Error(`Unsupported operation ${params.operation}`);
     }
     res.status(200).json({ result });
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).json({ message: e.message });
   }
 }

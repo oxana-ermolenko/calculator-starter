@@ -33,8 +33,8 @@ const Calculator = (): JSX.Element => {
     e.preventDefault();
     const query = {
       operation: operation,
-      first: firstRef.current.value,
-      second: secondRef.current.value,
+      first: firstRef.current?.value,
+      second: secondRef.current?.value,
     };
 
     axios
@@ -51,9 +51,17 @@ const Calculator = (): JSX.Element => {
     e.preventDefault();
     setOperation("");
     setResult(welcomeMessage);
-    firstRef.current.value = null;
-    secondRef.current.value = null;
-    document.querySelector("#operation").selectedIndex = 0;
+    if (firstRef.current !== null) {
+      (firstRef.current as HTMLInputElement).value = "";
+    }
+
+    if (secondRef.current !== null) {
+      (secondRef.current as HTMLInputElement).value = "";
+    }
+    const operationSelect = document.querySelector("#operation") as HTMLSelectElement | null;
+    if (operationSelect) {
+      operationSelect.selectedIndex = 0;
+    }
   };
 
   return (
