@@ -11,30 +11,31 @@ import {
 } from "@mui/material";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
+import { Operation } from "../utils/calculate";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, ChangeEvent, FormEvent } from "react";
 
-const Calculator = () => {
+const Calculator = (): JSX.Element => {
   const [operation, setOperation] = useState("");
   const [result, setResult] = useState("");
-  const firstRef = useRef(null);
-  const secondRef = useRef(null);
+  const firstRef = useRef<HTMLInputElement | null>(null);
+  const secondRef = useRef<HTMLInputElement | null>(null);
   const welcomeMessage = "Calculator is ready!";
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>):void => {
     setOperation(e.target.value);
   };
 
-  useEffect(() => {
+  useEffect(():void => {
     setResult(welcomeMessage);
   }, []);
 
-  const handleCalculate = (e) => {
+  const handleCalculate = (e: FormEvent<HTMLFormElement>):void => {
     e.preventDefault();
     const query = {
       operation: operation,
-      first: firstRef.current.value,
-      second: secondRef.current.value,
+      first: firstRef.current?.value,
+      second: secondRef.current?.value,
     };
 
     axios
@@ -47,26 +48,36 @@ const Calculator = () => {
       });
   };
 
-  const handleReset = (e) => {
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     setOperation("");
     setResult(welcomeMessage);
-    firstRef.current.value = null;
-    secondRef.current.value = null;
-    document.querySelector("#operation").selectedIndex = 0;
+    if (firstRef.current !== null) {
+      (firstRef.current as HTMLInputElement).value = "";
+    }
+
+    if (secondRef.current !== null) {
+      (secondRef.current as HTMLInputElement).value = "";
+    }
+    const operationSelect = document.getElementById("operation") as HTMLSelectElement | null;
+    if (operationSelect instanceof HTMLSelectElement) {
+      operationSelect.selectedIndex = 0;
+    }
   };
+
+   const Operations = {
+     [Operation.Add]: "+",
+     [Operation.Subtract]: "-",
+     [Operation.Multiply]: "*",
+     [Operation.Divide]: "/",
+   };
 
   return (
     <form id="calculator-form" onSubmit={handleCalculate}>
       <Grid2 container spacing={1}>
         <Grid2 xs={5}>
           <FormControl fullWidth>
-            <TextField
-              id="first"
-              label="First Number"
-              variant="outlined"
-              inputRef={firstRef}
-            />
+            <TextField id="first" label="First Number" variant="outlined" inputRef={firstRef} />
           </FormControl>
         </Grid2>
         <Grid2 xs={2}>
@@ -80,22 +91,17 @@ const Calculator = () => {
               }}
               onChange={handleChange}
             >
-              <option value="">Op</option>
-              <option value={"add"}>+</option>
-              <option value={"subtract"}>-</option>
-              <option value={"multiply"}>*</option>
-              <option value={"divide"}>/</option>
+              {Object.entries(Operations).map(([operation, symbol]) => (
+                <option key={operation} value={operation}>
+                  {symbol}
+                </option>
+              ))}
             </NativeSelect>
           </FormControl>
         </Grid2>
         <Grid2 xs={5}>
           <FormControl fullWidth>
-            <TextField
-              id="second"
-              label="Second Number"
-              variant="outlined"
-              inputRef={secondRef}
-            />
+            <TextField id="second" label="Second Number" variant="outlined" inputRef={secondRef} />
           </FormControl>
         </Grid2>
         <Grid2 xs={10}>
@@ -107,7 +113,7 @@ const Calculator = () => {
         </Grid2>
         <Grid2 xs={2}>
           <FormControl fullWidth>
-            <Button variant="outlines" onClick={handleReset}>
+            <Button variant="outlined" onClick={handleReset}>
               Reset
             </Button>
           </FormControl>
