@@ -23,6 +23,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/node": "20.3.2"
+    "@types/node": "20.3.2",
+    "typedoc": "^0.24.8"
   }
 }
