@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "doc": "typedoc --out docs --name 'Calculator Starter Docs' --tsconfig ./tsconfig.json --entryPointStrategy expand ./pages ./components ./utils"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
