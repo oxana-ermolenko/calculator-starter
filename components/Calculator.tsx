@@ -58,8 +58,8 @@ const Calculator = (): JSX.Element => {
     if (secondRef.current !== null) {
       (secondRef.current as HTMLInputElement).value = "";
     }
-    const operationSelect = document.querySelector("#operation") as HTMLSelectElement | null;
-    if (operationSelect) {
+    const operationSelect = document.getElementById("operation") as HTMLSelectElement | null;
+    if (operationSelect instanceof HTMLSelectElement) {
       operationSelect.selectedIndex = 0;
     }
   };
