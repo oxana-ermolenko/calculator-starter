@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { OutlinedInput } from "@mui/material";
 import axios from "axios";
+import { Operation } from "../utils/calculate";
 
 import { useState, useRef, useEffect, ChangeEvent, FormEvent } from "react";
 
@@ -64,17 +65,19 @@ const Calculator = (): JSX.Element => {
     }
   };
 
+   const Operations = {
+     [Operation.Add]: "+",
+     [Operation.Subtract]: "-",
+     [Operation.Multiply]: "*",
+     [Operation.Divide]: "/",
+   };
+
   return (
     <form id="calculator-form" onSubmit={handleCalculate}>
       <Grid2 container spacing={1}>
         <Grid2 xs={5}>
           <FormControl fullWidth>
-            <TextField
-              id="first"
-              label="First Number"
-              variant="outlined"
-              inputRef={firstRef}
-            />
+            <TextField id="first" label="First Number" variant="outlined" inputRef={firstRef} />
           </FormControl>
         </Grid2>
         <Grid2 xs={2}>
@@ -88,22 +91,17 @@ const Calculator = (): JSX.Element => {
               }}
               onChange={handleChange}
             >
-              <option value="">Op</option>
-              <option value={"add"}>+</option>
-              <option value={"subtract"}>-</option>
-              <option value={"multiply"}>*</option>
-              <option value={"divide"}>/</option>
+              {Object.entries(Operations).map(([operation, symbol]) => (
+                <option key={operation} value={operation}>
+                  {symbol}
+                </option>
+              ))}
             </NativeSelect>
           </FormControl>
         </Grid2>
         <Grid2 xs={5}>
           <FormControl fullWidth>
-            <TextField
-              id="second"
-              label="Second Number"
-              variant="outlined"
-              inputRef={secondRef}
-            />
+            <TextField id="second" label="Second Number" variant="outlined" inputRef={secondRef} />
           </FormControl>
         </Grid2>
         <Grid2 xs={10}>
