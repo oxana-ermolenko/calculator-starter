@@ -6,6 +6,10 @@ interface Params {
   first: number;
   second: number;
 }
+//type quard function
+function isOperation(op: string): op is Operation {
+  return Object.values(Operation).includes(op as Operation);
+}
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -16,8 +20,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const params: Params = extractParams(req.query.params);
-    const result = calculate(params.operation, params.first, params.second);
-    res.status(200).json({ result });
+    if(isOperation(params.operation)) {
+      const result = calculate(params.operation, params.first, params.second);
+      res.status(200).json({ result });
+    }else {
+      throw new Error(`Invalid operation: ${params.operation}`);
+    }
   } catch (e: any) {
     res.status(500).json({ message: e.message });
   }
